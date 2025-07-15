@@ -1,2 +1,8 @@
 # cox_ph_estimation_notebooks
-Personal discovery work on estimating Cox Proportional hazards coefficients for for both breslow and efron ties, using both autograd and directly calculating the gradient and hessian
+Personal discovery work on estimating Cox Proportional Hazards coefficients for for both breslow and efron ties, using both autograd and directly calculating the gradient and hessian
+
+This Repo contains some of my personal work regarding solving the Cox Proportional Hazard's 'negative log partial likelihood' loss functions, for breslow and efron ties. I used pytensor's autograd engine to solve for the gradient/jacobian and hessian matrices; pytensor seems to be the only library whose autograd engine covers all the vector operations I needed. I also used Ralph Newton, as recommended in the literature, with half stepping(also done in R's survival package and elsewhere) to solve for the coordinates. Due to my code being completely vectorized(and mostly outside of the python runtime), I was able to get up to a 30X performance boost for training time over the primary python survival analysis libraries(lifelines & scikit survival).
+
+I have also translated the known solutions for the jacobian and hessian matrices for the breslow log partial likelihood into pure numpy(without autograd). The pure numpy solution is slightly faster than the pytensor autograd, given extra effort I can further optimize it (and perhaps also add efron).
+
+Finally, I have  included my attempt to translate the pure numpy solution for the jacobian and hessian for breslow ties to dask array. Due to an issue I experienced with dask indexing/slicing/take I am unable to get correct results. Assuming I finish the dask implementation, the number of shuffles required to solve the jacobian and hessian would be unwieldy, in addition to the headaches of dealing with a distributed system. 
